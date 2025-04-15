@@ -1,8 +1,14 @@
 # Getting Started with `scode`
 
-`scode` is a command-line tool available on Midway. It enables users to launch, manage, and access **Visual Studio Code Server for Web** sessions on a SLURM-based high-performance computing environment.
+Due to security considerations, compute nodes on Midway do not have direct Internet access, making it infeasible for VSCode clients to connect via SSH, and also particularly challenging to set up a personal VSCode server on them.
 
-This guide provides a minimal and reliable workflow to get up and running with a VSCode Web instance, monitor it, and connect securely from your local machine.
+To meet the growing demand for interactive development, RCC provides `scode`: a command-line utility that allows users to securely launch, manage, and access VSCode Web sessions running entirely on compute nodes from their browser.
+
+![VSCode Web Interface](./images/vscode-web.png){: class="responsive-img"}
+
+With `scode`, users can continuously prototype, debug, and develop HPC applications without the need to repeatedly submit sbatch jobs. Workflows that involve interactive development—such as model training, data exploration, and performance tuning—can be performed more efficiently and with immediate feedback.
+
+This guide provides a minimal and reliable workflow to help you get started with a VSCode Web session, monitor its status, and connect securely from your local machine.
 
 ---
 
@@ -13,7 +19,7 @@ This guide provides a minimal and reliable workflow to get up and running with a
 | Load SCode module             | `module load scode`                                                             |
 | Launch VSCode Server             | `scode serve-web -- --account <pi-account> --time 01:00:00 --mem 16G` |
 | List jobs and get job ID     | `scode jobs list`                                                               |
-| Check status and get SSH info | `scode jobs status <job_id>`                                                    |
+| Check status and get conncection instructions | `scode jobs status <job_id>`                                                    |
 | Cancel a job                  | `scancel <job_id>`                                                              |
 
 
@@ -48,6 +54,7 @@ scode serve-web -- --account <pi-account> --time 01:00:00 --partition caslake --
 - Additional slurm options can be added to the `scode serve-web` command after the `--` separator. Refer to [Slurm User Guide](/slurm/sbatch/) and [Sbatch Documentation](https://slurm.schedmd.com/sbatch.html) for more details on job submission options.
 
 This command will:
+
 - Submit a SLURM job to run the VSCode Web server
 - Prepare the environment and server installation automatically
 - Return the job ID and logging paths
@@ -80,7 +87,7 @@ Use `scancel 30317404` to cancel the server job.
 
 To view active VSCode Web jobs:
 
-```
+```bash
 scode jobs list
 ```
 
@@ -145,7 +152,7 @@ Once the SSH tunnel is active, follow the link from `scode jobs status`:
 http://localhost:8000/?tkn=f1c72d89-4a5e-43d2-ae1b-9b8237dce021
 ```
 
-Modify port `8000` if you used a different local port.
+Modify port `8000` if you used a different local port in `Step 4`.
 
 You will be redirected to a fully functional VSCode Web interface running on the cluster, within your compute environment.
 
